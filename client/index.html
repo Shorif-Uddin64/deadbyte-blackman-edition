@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DEADBYTE: BLACKMAN EDITION</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+
+    <!-- ===== Panel 1: Top (WHITE) ===== -->
+    <div class="topCard panelWhite">
+      <div class="titleBlock">
+        <div class="title">DEADBYTE: BLACKMAN EDITION</div>
+        <div class="subtitle">Friends Multiplayer • Voice Chat • Sound FX</div>
+      </div>
+
+      <div class="controlsRow">
+        <label class="pill">
+          Mode
+          <select id="modeSelect">
+            <option value="group">Group (2–6 players)</option>
+            <option value="single">Single (Solo + Bots)</option>
+          </select>
+        </label>
+
+        <label class="pill">
+          Room
+          <input id="roomInput" value="123" maxlength="12" />
+        </label>
+
+        <label class="pill">
+          Name
+          <select id="nameSelect">
+            <option value="">Select</option>
+            <option>Blackman</option>
+            <option>Yeasin</option>
+            <option>Lamia</option>
+            <option>Foyazi</option>
+            <option>Minhaz</option>
+            <option>Shahrin</option>
+          </select>
+        </label>
+
+        <button id="joinBtn" class="btnPrimary">Join</button>
+        <button id="restartBtn" class="btn">Restart</button>
+
+        <label class="pillToggle">
+          Sound
+          <button id="soundToggle" class="toggleBtn off">OFF</button>
+        </label>
+
+        <label class="pill">
+          Volume
+          <input id="volumeSlider" type="range" min="0" max="100" value="55" />
+        </label>
+
+        <label class="pillToggle">
+          Voice
+          <button id="voiceToggle" class="toggleBtn off">OFF</button>
+        </label>
+      </div>
+
+      <div class="hint">
+        Move: <b>WASD/Arrow</b> • Aim: <b>Mouse</b> • Shoot: <b>F</b> • Chat: <b>Enter</b> • Voice (Group only)
+      </div>
+    </div>
+
+    <!-- ===== Panel 2 + 3: Game + Right Sidebar (WHITE) ===== -->
+    <div class="mainWrap">
+      <div class="gameWrap panelWhite">
+        <canvas id="gameCanvas" width="900" height="520"></canvas>
+      </div>
+
+      <div class="rightSidebar panelWhite">
+        <div class="sideTitle">Chat</div>
+        <div id="chatLog" class="chatLog"></div>
+
+        <div class="sideTitle">Emoji</div>
+        <div id="emojiPanel" class="emojiPanel"></div>
+
+        <div class="chatInputRow">
+          <input id="chatInput" placeholder="type message..." />
+          <button id="sendBtn" class="btnPrimary">Send</button>
+        </div>
+
+        <div class="tipText">Tip: Sound ON দিলে background music + gunshot + ambient চলবে ✅</div>
+        <div class="tipText">Voice ON করলে mic permission চাইবে (Group mode only) 🎙️</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
