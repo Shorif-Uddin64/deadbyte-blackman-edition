@@ -38,6 +38,16 @@ const allowedNames = [
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
+   socket.on("bullet", ({ roomCode, fromX, fromY, toX, toY }) => {
+  if (!roomCode) return;
+
+  io.to(roomCode).emit("bullet", {
+    shooterId: socket.id,
+    fromX, fromY, toX, toY
+  });
+});
+  
+
   socket.on("joinRoom", ({ roomCode, name }) => {
 
     if (!roomCode) return;
@@ -67,10 +77,37 @@ io.on("connection", (socket) => {
     // Join room
     socket.join(roomCode);
 
-    room.players[socket.id] = {
-      name: name,
-      life: 200
-    };
+    // random spawn (server side)
+const spawn = {
+  x: 60 + Math.random() * (900 - 120),
+  y: 60 + Math.random() * (520 - 120)
+};
+
+room.players[socket.id] = {
+  name: name,
+  life: 200,
+  x: spawn.x,
+  y: spawn.y
+};
+// ===============================
+// Live Movement Sync (Group)
+// ===============================
+socket.on("move", ({ roomCode, x, y }) => {
+  if (!roomCode) return;
+
+  const room = rooms[roomCode];
+  if (!room || !room.players[socket.id]) return;
+
+  room.players[socket.id].x = x;
+  room.players[socket.id].y = y;
+
+  io.to(roomCode).emit("playerMoved", {
+    id: socket.id,
+    x,
+    y
+  });
+});
+
 
     io.to(roomCode).emit("updatePlayers", room.players);
   });

@@ -33,6 +33,11 @@ const WORLD = { w: 900, h: 520 };
 const PLAYER_R = 16;
 const MOVE_SPEED = 2.2;
 
+// ✅ movement sync throttle
+let lastMoveSentAt = 0;
+const MOVE_SEND_MS = 45; // ~22 updates/sec
+
+
 // ===============================
 // State
 // ===============================
@@ -400,10 +405,33 @@ socket.on("nameTaken", () => alert("This name is already taken in this room!"));
 
 socket.on("updatePlayers", (serverPlayers) => {
   if (mode !== "group") return;
+
   players = serverPlayers || {};
+
   for (const id in players) {
     if (!posCache[id]) posCache[id] = randomSpawn();
+
+    // ✅ if server sends x,y use it
+    if (typeof players[id].x === "number") posCache[id].x = players[id].x;
+    if (typeof players[id].y === "number") posCache[id].y = players[id].y;
   }
+});
+
+
+// ✅ live movement receive (from server)
+socket.on("playerMoved", ({ id, x, y }) => {
+  if (!id) return;
+  if (!posCache[id]) posCache[id] = randomSpawn();
+  posCache[id].x = x;
+  posCache[id].y = y;
+});
+
+
+// 👇 এখানেই add করবে
+socket.on("bullet", (b) => {
+  if (!b) return;
+  if (b.shooterId === myId) return;
+  spawnBullet(b.fromX, b.fromY, b.toX, b.toY);
 });
 
 // ===============================
@@ -582,6 +610,14 @@ function shoot() {
     if (!me) return;
 
     spawnBullet(me.x, me.y, mouse.x, mouse.y);
+    
+ socket.emit("bullet", {
+  roomCode: currentRoom,
+  fromX: me.x,
+  fromY: me.y,
+  toX: mouse.x,
+  toY: mouse.y
+});
 
     const all = groupPlayerList();
     const hitId = hitscanFindTarget(me, all);
@@ -709,6 +745,15 @@ function move() {
 
   if (mode === "group") {
     setGroupMePos(me.x, me.y);
+// ✅ send live position to server (throttled)
+if (mode === "group" && currentRoom) {
+  const now = performance.now();
+  if (now - lastMoveSentAt >= MOVE_SEND_MS) {
+    lastMoveSentAt = now;
+    socket.emit("move", { roomCode: currentRoom, x: me.x, y: me.y });
+  }
+}
+
   } else {
     solo.me.x = me.x;
     solo.me.y = me.y;
