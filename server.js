@@ -69,7 +69,7 @@ io.on("connection", (socket) => {
 
     room.players[socket.id] = {
       name: name,
-      life: 10
+      life: 200
     };
 
     io.to(roomCode).emit("updatePlayers", room.players);

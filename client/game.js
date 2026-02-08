@@ -646,12 +646,12 @@ function startSolo() {
   bullets = [];
 
   const s = randomSpawn();
-  solo.me = { id: "me", name: myName, x: s.x, y: s.y, life: 10 };
+  solo.me = { id: "me", name: myName, x: s.x, y: s.y, life: 200 };
 
   solo.bots = [];
   for (let i = 0; i < 5; i++) {
     const b = randomSpawn();
-    solo.bots.push({ id: "bot" + i, name: "Bot-" + (i + 1), x: b.x, y: b.y, life: 10 });
+    solo.bots.push({ id: "bot" + i, name: "Bot-" + (i + 1), x: b.x, y: b.y, life: 200 });
   }
 
   addChatLine("— single mode: 1 player + 5 bots —");
