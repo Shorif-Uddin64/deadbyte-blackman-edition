@@ -1,6 +1,8 @@
+/* style.css */
+
 :root{
-  --bg:#070a10;        /* FULL DARK BACKGROUND */
-  --panel:#ffffff;     /* WHITE PANELS */
+  --bg:#070a10;
+  --panel:#ffffff;
   --text:#0f172a;
   --muted:#4b5563;
   --border:#d6dbe3;
@@ -12,7 +14,9 @@
 body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: radial-gradient(900px 650px at 25% 20%, #0f172a 0%, var(--bg) 55%, #05070c 100%);
+  /* ✅ Blue-wave background image from client/assets/bg.jpg */
+  background: url("assets/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
   color:#e5e7eb;
 }
 
@@ -22,11 +26,26 @@ body{
   padding: 0 14px 24px;
 }
 
-.panelWhite{
+/* ===== Glass Panels ===== */
+.glassPanel{
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.10) 35%,
+    rgba(0,0,0,0.25) 100%);
+  border: 1px solid rgba(255,255,255,0.20);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+}
+
+/* ===== Only Game Panel White ===== */
+.gamePanelWhite{
   background: var(--panel);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 14px;
   box-shadow: var(--shadow);
+  overflow:hidden;
 }
 
 /* ===== Top Panel ===== */
@@ -37,15 +56,35 @@ body{
 .titleBlock{
   text-align:center;
   margin-bottom: 10px;
-  color: var(--text);
 }
+
+.brandRow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 12px;
+}
+
+.headerLogo{
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.55);
+  box-shadow: 0 0 12px rgba(0,0,0,0.35);
+}
+
+.titleTextWrap{ text-align:left; }
+
 .title{
   font-weight: 900;
   letter-spacing: .8px;
+  color: #ffffff;
 }
+
 .subtitle{
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(255,255,255,0.85);
   margin-top: 3px;
 }
 
@@ -57,68 +96,72 @@ body{
   justify-content:center;
 }
 
+/* pills on glass */
 .pill, .pillToggle{
   display:flex;
   gap:8px;
   align-items:center;
-  background:#ffffff;
-  border:1px solid var(--border);
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.22);
   padding:8px 10px;
   border-radius: 12px;
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(255,255,255,0.88);
 }
 
 .pill input, .pill select{
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,0.24);
   border-radius:10px;
   padding:7px 9px;
   outline:none;
   min-width: 120px;
-  background:#fff;
+  background: rgba(0,0,0,0.15);
+  color:#fff;
 }
 
 .pill input[type="range"]{ min-width: 140px; }
 
 .btn, .btnPrimary{
-  border: 1px solid var(--border);
-  background:#fff;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.14);
   padding: 9px 12px;
   border-radius: 12px;
   cursor:pointer;
   font-weight: 700;
+  color:#fff;
 }
 
 .btnPrimary{
-  background: #0f172a;
+  background: rgba(15,23,42,0.85);
   color:#fff;
-  border-color: #0f172a;
+  border-color: rgba(15,23,42,0.85);
 }
 
 .toggleBtn{
-  border:1px solid var(--border);
-  background:#fff;
+  border:1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.14);
   padding: 7px 10px;
   border-radius: 12px;
   cursor:pointer;
   font-weight:800;
   min-width: 58px;
+  color:#fff;
 }
 .toggleBtn.on{
-  background:#0f172a;
+  background: rgba(15,23,42,0.85);
   color:#fff;
-  border-color:#0f172a;
+  border-color: rgba(15,23,42,0.85);
 }
 .toggleBtn.off{
-  background:#fff;
-  color:#111827;
+  background: rgba(255,255,255,0.14);
+  color:#fff;
 }
 
 .hint{
   margin-top: 10px;
   text-align:center;
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(255,255,255,0.85);
 }
 
 /* ===== Main Layout ===== */
@@ -129,6 +172,54 @@ body{
   align-items: stretch;
 }
 
+/* Left Info Panel */
+.leftInfo{
+  width: 270px;
+  height: 520px;
+  padding: 12px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  overflow:hidden;
+}
+
+.infoTitle{
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing:.7px;
+  text-transform: uppercase;
+  color:#fff;
+}
+
+.infoSection{
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.infoHead{
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing:.6px;
+  color:#fff;
+  margin-bottom: 6px;
+}
+
+.infoText{
+  font-size: 12px;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.45;
+}
+
+.infoFooter{
+  margin-top: auto;
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  text-align:center;
+}
+
+/* Game Panel */
 .gameWrap{
   flex:1;
   min-width:0;
@@ -144,7 +235,7 @@ body{
   border-radius: 14px;
 }
 
-/* ===== Right Sidebar ===== */
+/* ===== Right Sidebar (Chat Premium) ===== */
 .rightSidebar{
   width: 330px;
   height: 520px;
@@ -158,28 +249,37 @@ body{
   font-weight: 900;
   font-size: 12px;
   letter-spacing:.6px;
-  color:#111827;
+  color:#ffffff;
   margin-top: 2px;
 }
 
+/* chat log premium */
 .chatLog{
   flex: 1;
   min-height: 0;
   overflow-y:auto;
-  border:1px solid var(--border);
-  background:#ffffff;
+  border:1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
   border-radius: 12px;
   padding: 10px;
   font-size: 13px;
-  color:#111827;
+  color:#ffffff;
 }
+
+/* scrollbar */
+.chatLog::-webkit-scrollbar{ width:6px; }
+.chatLog::-webkit-scrollbar-thumb{
+  background: rgba(0, 255, 204, 0.55);
+  border-radius: 10px;
+}
+.chatLog::-webkit-scrollbar-track{ background: transparent; }
 
 .chatMsg{
   padding: 6px 8px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 6px;
-  background: #f3f6fb;
-  border: 1px solid #e2e8f0;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
   word-break: break-word;
 }
 
@@ -191,14 +291,22 @@ body{
   overflow-y:auto;
 }
 
+.emojiPanel::-webkit-scrollbar{ width:6px; }
+.emojiPanel::-webkit-scrollbar-thumb{
+  background: rgba(0, 255, 204, 0.40);
+  border-radius: 10px;
+}
+.emojiPanel::-webkit-scrollbar-track{ background: transparent; }
+
 .emojiBtn{
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  border: 1px solid var(--border);
-  background:#fff;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.10);
   cursor:pointer;
   font-size: 16px;
+  color:#fff;
 }
 
 .chatInputRow{
@@ -209,14 +317,19 @@ body{
 
 .chatInputRow input{
   flex:1;
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,0.18);
   border-radius: 12px;
   padding: 10px 10px;
   outline:none;
-  background:#fff;
+  background: rgba(255,255,255,0.10);
+  color:#fff;
+}
+
+.chatInputRow input::placeholder{
+  color: rgba(255,255,255,0.65);
 }
 
 .tipText{
   font-size: 12px;
-  color: #334155;
+  color: rgba(255,255,255,0.80);
 }

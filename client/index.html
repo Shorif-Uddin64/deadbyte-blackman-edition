@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,11 +10,16 @@
 <body>
   <div class="page">
 
-    <!-- ===== Panel 1: Top (WHITE) ===== -->
-    <div class="topCard panelWhite">
+    <!-- ===== Panel 1: Top (GLASS) ===== -->
+    <div class="topCard glassPanel">
       <div class="titleBlock">
-        <div class="title">DEADBYTE: BLACKMAN EDITION</div>
-        <div class="subtitle">Friends Multiplayer • Voice Chat • Sound FX</div>
+        <div class="brandRow">
+          <img src="assets/logo.png" class="headerLogo" alt="logo" />
+          <div class="titleTextWrap">
+            <div class="title">DEADBYTE: BLACKMAN EDITION</div>
+            <div class="subtitle">Friends Multiplayer • Voice Chat • Sound FX</div>
+          </div>
+        </div>
       </div>
 
       <div class="controlsRow">
@@ -67,13 +73,79 @@
       </div>
     </div>
 
-    <!-- ===== Panel 2 + 3: Game + Right Sidebar (WHITE) ===== -->
+    <!-- ===== Panel 2 + 3 + 4: Left Info + Game + Right Sidebar ===== -->
     <div class="mainWrap">
-      <div class="gameWrap panelWhite">
+
+      <!-- ===== Left Info Panel (GLASS) ===== -->
+      <div class="leftInfo glassPanel">
+        <div class="infoTitle">Information</div>
+
+        <div class="infoSection">
+          <div class="infoHead">Creator</div>
+          <div class="infoText">
+            Developed &amp; maintained by <b>Shorif Uddin (Blackman)</b>.<br />
+            Cyber Security learner • AI builder • Game developer.
+          </div>
+        </div>
+
+        <div class="infoSection">
+          <div class="infoHead">About Game</div>
+          <div class="infoText">
+            <b>DeadByte: BlackMan Edition</b> is a fast-paced real-time multiplayer browser game with robot characters,
+            voice communication, sound effects, and smooth combat gameplay.
+          </div>
+        </div>
+
+        <div class="infoSection">
+          <div class="infoHead">How To Play</div>
+          <div class="infoText">
+            1) Choose <b>Mode</b> (Group or Single).<br />
+            2) For Group: type a <b>Room Code</b> and select your <b>Name</b>.<br />
+            3) Click <b>Join</b> to start.<br />
+            4) Move with <b>WASD/Arrow</b>, aim with <b>Mouse</b>, shoot with <b>F</b>.<br />
+            5) Press <b>Enter</b> to chat (typing disables shooting).<br />
+            6) Turn on <b>Voice</b> for mic (Group only).
+          </div>
+        </div>
+
+        <div class="infoSection">
+          <div class="infoHead">Game Rules</div>
+          <div class="infoText">
+            • Max 6 players in Group mode.<br />
+            • Player life decreases when hit; at 0 life the player is dead.<br />
+            • In Single mode you fight bots; restart to reset.<br />
+            • Respect players — no abusive language in chat/voice.
+          </div>
+        </div>
+
+        <div class="infoSection">
+          <div class="infoHead">Voice &amp; Sound</div>
+          <div class="infoText">
+            • Sound toggle controls background music + ambient.<br />
+            • Gunshot works even if music is OFF.<br />
+            • Voice needs mic permission (Group only).
+          </div>
+        </div>
+
+        <div class="infoSection">
+          <div class="infoHead">Tech Stack</div>
+          <div class="infoText">
+            Node.js • Socket.IO • HTML Canvas • WebAudio • WebRTC
+          </div>
+        </div>
+
+        <div class="infoFooter">
+          © DEADBYTE: BLACKMAN EDITION
+        </div>
+      </div>
+
+      <!-- ===== Game Panel (WHITE ONLY) ===== -->
+      <div class="gameWrap gamePanelWhite">
         <canvas id="gameCanvas" width="900" height="520"></canvas>
       </div>
 
-      <div class="rightSidebar panelWhite">
+      <!-- ===== Right Sidebar (GLASS PREMIUM) ===== -->
+      <div class="rightSidebar glassPanel chatGlass">
         <div class="sideTitle">Chat</div>
         <div id="chatLog" class="chatLog"></div>
 
@@ -85,7 +157,7 @@
           <button id="sendBtn" class="btnPrimary">Send</button>
         </div>
 
-        <div class="tipText">Tip: Sound ON দিলে background music + gunshot + ambient চলবে ✅</div>
+        <div class="tipText">Tip: Sound ON দিলে background music + ambient চলবে ✅</div>
         <div class="tipText">Voice ON করলে mic permission চাইবে (Group mode only) 🎙️</div>
       </div>
     </div>

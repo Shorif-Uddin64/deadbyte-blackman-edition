@@ -1,3 +1,4 @@
+// game.js
 console.log("✅ DEADBYTE game.js FINAL (Music toggle + Gunshot always + Voice + Robot + Bullets)");
 
 const socket = io();
@@ -192,7 +193,7 @@ function startAmbient() {
 
     const t = audioCtx.currentTime;
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.linearRampToValueAtTime(0.02 * getVol(), t + 0.02);
+    g.gain.linearRampToValueAtTime(0.0001 + 0.02 * getVol(), t + 0.02);
     g.gain.linearRampToValueAtTime(0.0001, t + 0.22);
 
     o.start(t);
@@ -209,7 +210,7 @@ function stopAmbient() {
 async function playGunshot() {
   // unlock (needed in some browsers)
   ensureAudioCtx();
-  if (audioCtx.state === "suspended") {
+  if (audioCtx && audioCtx.state === "suspended") {
     try { await audioCtx.resume(); } catch(e) {}
   }
 
@@ -257,8 +258,6 @@ async function startVoice() {
   voiceToggle.textContent = "ON";
   addChatLine("🎙️ Voice ON (Group).");
 
-  // Ask server for peers list (server will send peersInRoom)
-  // This will trigger offer creation for existing peers
   socket.emit("voice-ready", { roomCode: currentRoom }); // harmless if server ignores
 }
 
@@ -297,7 +296,6 @@ function ensurePeerConnection(peerId) {
 
   const pc = new RTCPeerConnection(rtcConfig);
 
-  // add local mic tracks
   if (localStream) {
     for (const track of localStream.getTracks()) {
       pc.addTrack(track, localStream);
@@ -337,11 +335,9 @@ async function callPeer(peerId) {
   socket.emit("voice-offer", { to: peerId, offer });
 }
 
-// existing peers list
 socket.on("peersInRoom", async ({ peers: peerList }) => {
   if (!voiceEnabled) return;
   for (const peerId of peerList) {
-    // Avoid glare: only smaller id initiates
     if (myId && peerId && myId < peerId) {
       await callPeer(peerId);
     }
@@ -370,7 +366,6 @@ socket.on("peerLeft", ({ peerId }) => {
   addChatLine(`👤 Peer left voice: ${peerId.slice(0, 5)}...`);
 });
 
-// offer/answer/ice
 socket.on("voice-offer", async ({ from, offer }) => {
   if (!voiceEnabled || !localStream) return;
   const pc = ensurePeerConnection(from);
@@ -415,7 +410,6 @@ socket.on("updatePlayers", (serverPlayers) => {
 // Join / Restart (unlock audio on click)
 // ===============================
 joinBtn.addEventListener("click", async () => {
-  // unlock audio early (for gunshot reliability)
   ensureAudioCtx();
   if (audioCtx && audioCtx.state === "suspended") {
     audioCtx.resume().catch(() => {});
@@ -445,7 +439,6 @@ joinBtn.addEventListener("click", async () => {
     socket.emit("joinRoom", { roomCode, name: myName });
     addChatLine(`— joined room ${roomCode} as ${myName} —`);
 
-    // if voice already enabled, restart it to ensure peer connections
     if (voiceEnabled) {
       stopVoice();
       await startVoice();
@@ -467,11 +460,28 @@ restartBtn.addEventListener("click", () => {
 });
 
 // ===============================
+// Typing Guard (FIX F CONFLICT)
+// ===============================
+function isTyping() {
+  const el = document.activeElement;
+  if (!el) return false;
+  const tag = (el.tagName || "").toLowerCase();
+  return tag === "input" || tag === "textarea" || el.isContentEditable;
+}
+
+// ===============================
 // Input
 // ===============================
 window.addEventListener("keydown", (e) => {
+  // ✅ typing safe (no move / no shoot)
+  if (isTyping()) return;
+
   keys[e.key.toLowerCase()] = true;
-  if (e.key.toLowerCase() === "f") shoot();
+
+  if (e.key.toLowerCase() === "f") {
+    e.preventDefault();
+    shoot();
+  }
 });
 
 window.addEventListener("keyup", (e) => {
@@ -564,7 +574,6 @@ function updateAndDrawBullets() {
 // Shooting (hitscan + visible bullet + mp3 gunshot)
 // ===============================
 function shoot() {
-  // ✅ always gunshot sound (music may be OFF)
   playGunshot();
 
   if (mode === "group") {
@@ -690,8 +699,8 @@ function move() {
   if (keys["s"] || keys["arrowdown"]) vy += 1;
   if (keys["a"] || keys["arrowleft"]) vx -= 1;
   if (keys["d"] || keys["arrowright"]) vx += 1;
-
   const l = Math.hypot(vx, vy) || 1;
+
   vx = (vx / l) * MOVE_SPEED;
   vy = (vy / l) * MOVE_SPEED;
 
@@ -791,13 +800,11 @@ function drawPlayer(p, isMe = false) {
   ctx.save();
   ctx.globalAlpha = dead ? 0.35 : 1;
 
-  // glow highlight
   ctx.beginPath();
   ctx.arc(p.x, p.y, 26, 0, Math.PI * 2);
   ctx.fillStyle = isMe ? "rgba(15,23,42,0.18)" : "rgba(30,41,59,0.12)";
   ctx.fill();
 
-  // robot sizes
   const headW = 28, headH = 18;
   const bodyW = 34, bodyH = 22;
 
@@ -807,7 +814,6 @@ function drawPlayer(p, isMe = false) {
   const bodyX = p.x - bodyW / 2;
   const bodyY = p.y - 4;
 
-  // antenna
   ctx.strokeStyle = dead ? "rgba(160,160,160,0.4)" : tint;
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -820,22 +826,17 @@ function drawPlayer(p, isMe = false) {
   ctx.arc(p.x, headY - 12, 3, 0, Math.PI * 2);
   ctx.fill();
 
-  // head
   roundRect(headX, headY, headW, headH, 7, body, tint, dead);
 
-  // eyes
   ctx.fillStyle = dead ? "rgba(200,200,200,0.4)" : "#e5e7eb";
   ctx.fillRect(p.x - 8, headY + 7, 5, 4);
   ctx.fillRect(p.x + 3, headY + 7, 5, 4);
 
-  // body
   roundRect(bodyX, bodyY, bodyW, bodyH, 8, body, tint, dead);
 
-  // chest light
   ctx.fillStyle = dead ? "rgba(200,200,200,0.25)" : tint;
   ctx.fillRect(p.x - 6, bodyY + 7, 12, 6);
 
-  // arms
   ctx.strokeStyle = dead ? "rgba(160,160,160,0.35)" : tint;
   ctx.lineWidth = 3;
   ctx.beginPath();
@@ -848,7 +849,6 @@ function drawPlayer(p, isMe = false) {
   ctx.lineTo(bodyX + bodyW, bodyY + 14);
   ctx.stroke();
 
-  // name label
   ctx.font = "bold 12px system-ui";
   ctx.textAlign = "center";
   ctx.textBaseline = "bottom";
@@ -856,7 +856,6 @@ function drawPlayer(p, isMe = false) {
   const label = dead ? `${p.name} (dead)` : p.name;
   ctx.fillText(label, p.x, headY - 6);
 
-  // life
   ctx.font = "12px system-ui";
   ctx.fillStyle = "#334155";
   ctx.textBaseline = "top";
