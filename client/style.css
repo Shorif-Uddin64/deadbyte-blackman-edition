@@ -1,7 +1,4 @@
-/* style.css */
-
 :root{
-  --bg:#070a10;
   --panel:#ffffff;
   --text:#0f172a;
   --muted:#4b5563;
@@ -9,46 +6,109 @@
   --shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
-*{box-sizing:border-box}
+*{ box-sizing:border-box; }
 
 body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  /* ✅ Blue-wave background image from client/assets/bg.jpg */
-  background: url("assets/bg.jpg") no-repeat center center fixed;
-  background-size: cover;
   color:#e5e7eb;
+  overflow-x: hidden;
+  position: relative;
+
+  /* ✅ Base image (your assets/bg.jpg) */
+  background: url("assets/bg.jpg") no-repeat center center fixed;
+  background-size: 112% 112%;
+
+  /* ✅ Video-like movement */
+  animation: bgPanZoom 16s ease-in-out infinite alternate;
 }
 
+/* ✅ image pan + zoom */
+@keyframes bgPanZoom{
+  0%   { background-position: 46% 42%; background-size: 112% 112%; }
+  50%  { background-position: 54% 50%; background-size: 120% 120%; }
+  100% { background-position: 50% 60%; background-size: 114% 114%; }
+}
+
+/* ✅ Moving wave light overlay (makes it feel LIVE) */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  background:
+    radial-gradient(900px 520px at 20% 35%, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0) 60%),
+    radial-gradient(800px 480px at 80% 55%, rgba(80,180,255,0.16) 0%, rgba(0,0,0,0) 62%),
+    linear-gradient(115deg,
+      rgba(255,255,255,0.10) 0%,
+      rgba(0,0,0,0) 36%,
+      rgba(255,255,255,0.08) 56%,
+      rgba(0,0,0,0) 86%);
+
+  mix-blend-mode: screen;
+  filter: blur(18px);
+  opacity: 0.78;
+
+  animation: waveLight 7.5s ease-in-out infinite alternate;
+}
+
+@keyframes waveLight{
+  0%   { transform: translate3d(-2.8%, -1.8%, 0) rotate(-0.35deg) scale(1.02); }
+  50%  { transform: translate3d( 2.6%,  1.2%, 0) rotate( 0.35deg) scale(1.06); }
+  100% { transform: translate3d(-1.6%,  2.2%, 0) rotate(-0.25deg) scale(1.03); }
+}
+
+/* ✅ Soft vignette so panels pop */
+body::after{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(1200px 800px at 50% 50%, rgba(0,0,0,0.12), rgba(0,0,0,0.62));
+  opacity: 0.92;
+}
+
+/* =========================
+   PAGE WRAPPER
+========================= */
 .page{
   max-width: 1200px;
   margin: 18px auto;
   padding: 0 14px 24px;
 }
 
-/* ===== Glass Panels ===== */
+/* =========================
+   GLASS PANELS (Top/Left/Right)
+========================= */
 .glassPanel{
   background: linear-gradient(135deg,
     rgba(255,255,255,0.18) 0%,
     rgba(255,255,255,0.10) 35%,
-    rgba(0,0,0,0.25) 100%);
-  border: 1px solid rgba(255,255,255,0.20);
+    rgba(0,0,0,0.26) 100%);
+  border: 1px solid rgba(255,255,255,0.22);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-radius: 14px;
   box-shadow: 0 18px 40px rgba(0,0,0,0.45);
 }
 
-/* ===== Only Game Panel White ===== */
+/* =========================
+   ONLY GAME PANEL WHITE
+========================= */
 .gamePanelWhite{
   background: var(--panel);
-  border: 1px solid rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.10);
   border-radius: 14px;
   box-shadow: var(--shadow);
-  overflow:hidden;
+  overflow: hidden;
 }
 
-/* ===== Top Panel ===== */
+/* =========================
+   TOP PANEL
+========================= */
 .topCard{
   padding: 14px 16px 12px;
 }
@@ -74,7 +134,9 @@ body{
   box-shadow: 0 0 12px rgba(0,0,0,0.35);
 }
 
-.titleTextWrap{ text-align:left; }
+.titleTextWrap{
+  text-align:left;
+}
 
 .title{
   font-weight: 900;
@@ -106,7 +168,7 @@ body{
   padding:8px 10px;
   border-radius: 12px;
   font-size: 12px;
-  color: rgba(255,255,255,0.88);
+  color: rgba(255,255,255,0.90);
 }
 
 .pill input, .pill select{
@@ -115,11 +177,13 @@ body{
   padding:7px 9px;
   outline:none;
   min-width: 120px;
-  background: rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.18);
   color:#fff;
 }
 
-.pill input[type="range"]{ min-width: 140px; }
+.pill input[type="range"]{
+  min-width: 140px;
+}
 
 .btn, .btnPrimary{
   border: 1px solid rgba(255,255,255,0.22);
@@ -132,9 +196,8 @@ body{
 }
 
 .btnPrimary{
-  background: rgba(15,23,42,0.85);
-  color:#fff;
-  border-color: rgba(15,23,42,0.85);
+  background: rgba(15,23,42,0.88);
+  border-color: rgba(15,23,42,0.88);
 }
 
 .toggleBtn{
@@ -148,13 +211,11 @@ body{
   color:#fff;
 }
 .toggleBtn.on{
-  background: rgba(15,23,42,0.85);
-  color:#fff;
-  border-color: rgba(15,23,42,0.85);
+  background: rgba(15,23,42,0.88);
+  border-color: rgba(15,23,42,0.88);
 }
 .toggleBtn.off{
   background: rgba(255,255,255,0.14);
-  color:#fff;
 }
 
 .hint{
@@ -164,7 +225,9 @@ body{
   color: rgba(255,255,255,0.85);
 }
 
-/* ===== Main Layout ===== */
+/* =========================
+   MAIN LAYOUT (Left + Game + Right)
+========================= */
 .mainWrap{
   margin-top: 14px;
   display:flex;
@@ -172,7 +235,9 @@ body{
   align-items: stretch;
 }
 
-/* Left Info Panel */
+/* =========================
+   LEFT INFO PANEL
+========================= */
 .leftInfo{
   width: 270px;
   height: 520px;
@@ -180,7 +245,7 @@ body{
   display:flex;
   flex-direction:column;
   gap: 10px;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .infoTitle{
@@ -219,7 +284,9 @@ body{
   text-align:center;
 }
 
-/* Game Panel */
+/* =========================
+   GAME PANEL
+========================= */
 .gameWrap{
   flex:1;
   min-width:0;
@@ -230,12 +297,19 @@ body{
   width:100%;
   height:520px;
   display:block;
+
+  /* keep gameplay bright/clear */
   background:
-    radial-gradient(1000px 600px at 30% 25%, rgba(255,255,255,.95) 0%, rgba(240,244,248,.9) 45%, rgba(210,220,230,.9) 100%);
+    radial-gradient(1000px 600px at 30% 25%,
+      rgba(255,255,255,.96) 0%,
+      rgba(240,244,248,.92) 45%,
+      rgba(210,220,230,.92) 100%);
   border-radius: 14px;
 }
 
-/* ===== Right Sidebar (Chat Premium) ===== */
+/* =========================
+   RIGHT CHAT PANEL (Premium)
+========================= */
 .rightSidebar{
   width: 330px;
   height: 520px;
@@ -253,7 +327,6 @@ body{
   margin-top: 2px;
 }
 
-/* chat log premium */
 .chatLog{
   flex: 1;
   min-height: 0;
@@ -266,7 +339,7 @@ body{
   color:#ffffff;
 }
 
-/* scrollbar */
+/* better scrollbar */
 .chatLog::-webkit-scrollbar{ width:6px; }
 .chatLog::-webkit-scrollbar-thumb{
   background: rgba(0, 255, 204, 0.55);
@@ -333,3 +406,450 @@ body{
   font-size: 12px;
   color: rgba(255,255,255,0.80);
 }
+
+/* =========================
+   RESPONSIVE (basic)
+========================= */
+@media (max-width: 1050px){
+  .mainWrap{ flex-direction: column; }
+  .leftInfo, .rightSidebar{ width: 100%; height: auto; }
+  #gameCanvas{ height: 520px; }
+}:root{
+  --panel:#ffffff;
+  --text:#0f172a;
+  --muted:#4b5563;
+  --border:#d6dbe3;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:#e5e7eb;
+  overflow-x: hidden;
+  position: relative;
+
+  /* ✅ Base image (your assets/bg.jpg) */
+  background: url("assets/bg.jpg") no-repeat center center fixed;
+  background-size: 112% 112%;
+
+  /* ✅ Video-like movement */
+  animation: bgPanZoom 16s ease-in-out infinite alternate;
+}
+
+/* ✅ image pan + zoom */
+@keyframes bgPanZoom{
+  0%   { background-position: 46% 42%; background-size: 112% 112%; }
+  50%  { background-position: 54% 50%; background-size: 120% 120%; }
+  100% { background-position: 50% 60%; background-size: 114% 114%; }
+}
+
+/* =========================================================
+   (1) DIAGONAL LIGHT REFLECTION SWEEP  — like your red line
+   ========================================================= */
+body::before{
+  content:"";
+  position: fixed;
+  inset: -30%;
+  pointer-events: none;
+  z-index: -1;
+
+  /* glossy diagonal streak band */
+  background:
+    linear-gradient(120deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0) 40%,
+      rgba(255,255,255,0.10) 48%,
+      rgba(110,200,255,0.24) 52%,
+      rgba(255,255,255,0.10) 56%,
+      rgba(255,255,255,0) 64%,
+      rgba(255,255,255,0) 100%);
+
+  mix-blend-mode: screen;
+  filter: blur(10px);
+  opacity: 0.55;
+
+  transform: translate3d(-40%, -30%, 0) rotate(0.001deg);
+  animation: diagonalSweep 6.3s ease-in-out infinite;
+}
+
+@keyframes diagonalSweep{
+  0%   { transform: translate3d(-45%, -35%, 0) rotate(0.001deg); opacity: 0.12; }
+  18%  { opacity: 0.62; }
+  50%  { transform: translate3d( 10%,  10%, 0) rotate(0.001deg); opacity: 0.55; }
+  82%  { opacity: 0.62; }
+  100% { transform: translate3d( 55%,  42%, 0) rotate(0.001deg); opacity: 0.14; }
+}
+
+/* =========================================================
+   (2) SOFT PREMIUM DEPTH: glow + vignette (very light)
+   ========================================================= */
+body::after{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  background:
+    radial-gradient(900px 520px at 20% 35%, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0) 62%),
+    radial-gradient(800px 480px at 80% 55%, rgba(80,180,255,0.08) 0%, rgba(0,0,0,0) 65%),
+    radial-gradient(1000px 700px at 55% 85%, rgba(0,200,255,0.05) 0%, rgba(0,0,0,0) 68%),
+    radial-gradient(1200px 800px at 50% 50%, rgba(0,0,0,0.10), rgba(0,0,0,0.62));
+  opacity: 0.92;
+
+  animation: softPulse 8.5s ease-in-out infinite;
+}
+
+@keyframes softPulse{
+  0%   { opacity: 0.86; }
+  50%  { opacity: 0.98; }
+  100% { opacity: 0.86; }
+}
+
+/* =========================
+   PAGE WRAPPER
+========================= */
+.page{
+  max-width: 1200px;
+  margin: 18px auto;
+  padding: 0 14px 24px;
+}
+
+/* =========================
+   GLASS PANELS (Top/Left/Right)
+========================= */
+.glassPanel{
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.10) 35%,
+    rgba(0,0,0,0.26) 100%);
+  border: 1px solid rgba(255,255,255,0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+}
+
+/* =========================
+   ONLY GAME PANEL WHITE
+========================= */
+.gamePanelWhite{
+  background: var(--panel);
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* =========================
+   TOP PANEL
+========================= */
+.topCard{
+  padding: 14px 16px 12px;
+}
+
+.titleBlock{
+  text-align:center;
+  margin-bottom: 10px;
+}
+
+.brandRow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 12px;
+}
+
+.headerLogo{
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.55);
+  box-shadow: 0 0 12px rgba(0,0,0,0.35);
+}
+
+.titleTextWrap{
+  text-align:left;
+}
+
+.title{
+  font-weight: 900;
+  letter-spacing: .8px;
+  color: #ffffff;
+}
+
+.subtitle{
+  font-size: 12px;
+  color: rgba(255,255,255,0.85);
+  margin-top: 3px;
+}
+
+.controlsRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+}
+
+/* pills on glass */
+.pill, .pillToggle{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.22);
+  padding:8px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.90);
+}
+
+.pill input, .pill select{
+  border:1px solid rgba(255,255,255,0.24);
+  border-radius:10px;
+  padding:7px 9px;
+  outline:none;
+  min-width: 120px;
+  background: rgba(0,0,0,0.18);
+  color:#fff;
+}
+
+.pill input[type="range"]{
+  min-width: 140px;
+}
+
+.btn, .btnPrimary{
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.14);
+  padding: 9px 12px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-weight: 700;
+  color:#fff;
+}
+
+.btnPrimary{
+  background: rgba(15,23,42,0.88);
+  border-color: rgba(15,23,42,0.88);
+}
+
+.toggleBtn{
+  border:1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.14);
+  padding: 7px 10px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-weight:800;
+  min-width: 58px;
+  color:#fff;
+}
+.toggleBtn.on{
+  background: rgba(15,23,42,0.88);
+  border-color: rgba(15,23,42,0.88);
+}
+.toggleBtn.off{
+  background: rgba(255,255,255,0.14);
+}
+
+.hint{
+  margin-top: 10px;
+  text-align:center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.85);
+}
+
+/* =========================
+   MAIN LAYOUT (Left + Game + Right)
+========================= */
+.mainWrap{
+  margin-top: 14px;
+  display:flex;
+  gap:14px;
+  align-items: stretch;
+}
+
+/* =========================
+   LEFT INFO PANEL
+========================= */
+.leftInfo{
+  width: 270px;
+  height: 520px;
+  padding: 12px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.infoTitle{
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing:.7px;
+  text-transform: uppercase;
+  color:#fff;
+}
+
+.infoSection{
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.infoHead{
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing:.6px;
+  color:#fff;
+  margin-bottom: 6px;
+}
+
+.infoText{
+  font-size: 12px;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.45;
+}
+
+.infoFooter{
+  margin-top: auto;
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  text-align:center;
+}
+
+/* =========================
+   GAME PANEL
+========================= */
+.gameWrap{
+  flex:1;
+  min-width:0;
+  padding: 0;
+}
+
+#gameCanvas{
+  width:100%;
+  height:520px;
+  display:block;
+
+  background:
+    radial-gradient(1000px 600px at 30% 25%,
+      rgba(255,255,255,.96) 0%,
+      rgba(240,244,248,.92) 45%,
+      rgba(210,220,230,.92) 100%);
+  border-radius: 14px;
+}
+
+/* =========================
+   RIGHT CHAT PANEL (Premium)
+========================= */
+.rightSidebar{
+  width: 330px;
+  height: 520px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  padding: 12px;
+}
+
+.sideTitle{
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing:.6px;
+  color:#ffffff;
+  margin-top: 2px;
+}
+
+.chatLog{
+  flex: 1;
+  min-height: 0;
+  overflow-y:auto;
+  border:1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 13px;
+  color:#ffffff;
+}
+
+/* better scrollbar */
+.chatLog::-webkit-scrollbar{ width:6px; }
+.chatLog::-webkit-scrollbar-thumb{
+  background: rgba(0, 255, 204, 0.55);
+  border-radius: 10px;
+}
+.chatLog::-webkit-scrollbar-track{ background: transparent; }
+
+.chatMsg{
+  padding: 6px 8px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  word-break: break-word;
+}
+
+.emojiPanel{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 6px;
+  max-height: 86px;
+  overflow-y:auto;
+}
+
+.emojiPanel::-webkit-scrollbar{ width:6px; }
+.emojiPanel::-webkit-scrollbar-thumb{
+  background: rgba(0, 255, 204, 0.40);
+  border-radius: 10px;
+}
+.emojiPanel::-webkit-scrollbar-track{ background: transparent; }
+
+.emojiBtn{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.10);
+  cursor:pointer;
+  font-size: 16px;
+  color:#fff;
+}
+
+.chatInputRow{
+  display:flex;
+  gap:8px;
+  margin-top: auto;
+}
+
+.chatInputRow input{
+  flex:1;
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius: 12px;
+  padding: 10px 10px;
+  outline:none;
+  background: rgba(255,255,255,0.10);
+  color:#fff;
+}
+
+.chatInputRow input::placeholder{
+  color: rgba(255,255,255,0.65);
+}
+
+.tipText{
+  font-size: 12px;
+  color: rgba(255,255,255,0.80);
+}
+
+/* =========================
+   RESPONSIVE (basic)
+========================= */
+@media (max-width: 1050px){
+  .mainWrap{ flex-direction: column; }
+  .leftInfo, .rightSidebar{ width: 100%; height: auto; }
+  #gameCanvas{ height: 520px; }
+}
+
